@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3 Tahun Bersama — Muhammad Fahri & Sukma Wahyuning Tyas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at top, #2a0c1b 0%, #12060c 55%, #090306 100%);
+      color: #fff5f8;
+      overflow-x: hidden;
+    }
+    .font-script {
+      font-family: 'Dancing Script', cursive;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 182, 206, 0.18);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+    .polaroid {
+      background: #fffdf9;
+      color: #26161d;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .polaroid:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 22px 40px rgba(244, 63, 94, 0.28);
+    }
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(100vh) scale(0.6) rotate(0deg);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.75;
+      }
+      85% {
+        opacity: 0.65;
+      }
+      100% {
+        transform: translateY(-12vh) scale(1.15) rotate(24deg);
+        opacity: 0;
+      }
+    }
+    .floating-heart {
+      position: fixed;
+      bottom: -40px;
+      pointer-events: none;
+      z-index: 0;
+      animation: floatHeart linear forwards;
+    }
+  </style>
+</head>
+<body class="min-h-screen relative selection:bg-rose-500 selection:text-white">
+
+  <!-- Container Hati Melayang -->
+  <div id="hearts-container" aria-hidden="true"></div>
+
+  <!-- Input Tersembunyi untuk Upload Foto Mandiri -->
+  <input type="file" id="photo-upload-input" accept="image/*" class="hidden" />
+
+  <!-- Navigasi & Kontrol Musik -->
+  <header class="sticky top-0 z-30 backdrop-blur-md bg-[#12060c]/75 border-b border-rose-200/10">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2 text-rose-300 font-semibold">
+        <i class="fa-solid fa-heart text-rose-500 animate-pulse"></i>
+        <span>Fahri &amp; Sukma • 3rd Anniversary</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-6 text-sm text-rose-100/80">
+        <a href="#galeri" class="hover:text-rose-300 transition">Galeri</a>
+        <a href="#surat" class="hover:text-rose-300 transition">Surat Cinta</a>
+        <a href="#timeline" class="hover:text-rose-300 transition">Perjalanan 3 Tahun</a>
+        <a href="#kupon" class="hover:text-rose-300 transition">Kupon Cinta</a>
+        <a href="#kuis" class="hover:text-rose-300 transition">Kuis</a>
+      </nav>
+      <button id="music-toggle" type="button" class="px-4 py-2 rounded-full bg-rose-500/20 hover:bg-rose-500/35 border border-rose-400/40 text-rose-200 text-xs sm:text-sm font-medium flex items-center gap-2 transition">
+        <i id="music-icon" class="fa-solid fa-volume-xmark text-rose-400"></i>
+        <span id="music-label">Putar Nada Lembut</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="relative z-10 max-w-6xl mx-auto px-4 pb-20">
+
+    <!-- Hero Section -->
+    <section class="pt-12 pb-10 text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/15 border border-rose-400/30 text-rose-200 text-xs sm:text-sm mb-5">
+        <i class="fa-solid fa-sparkles text-amber-300"></i>
+        <span>Merayakan 3 Tahun Bersama</span>
+      </div>
+      <h1 class="font-script text-5xl sm:text-7xl text-rose-200 drop-shadow mb-3">
+        Muhammad Fahri &amp; Sukma Wahyuning Tyas
+      </h1>
+      <p class="max-w-2xl mx-auto text-rose-100/80 text-sm sm:text-base leading-relaxed">
+        Tiga tahun penuh tawa, cerita, dukungan, dan tumbuh bersama. Halaman kecil ini dibuat khusus untuk menyimpan hangatnya perjalanan kita.
+      </p>
+
+      <!-- Live Counter 3 Tahun -->
+      <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 max-w-3xl mx-auto">
+        <div class="glass-card rounded-2xl p-4">
+          <div id="days-count" class="text-3xl sm:text-4xl font-bold text-rose-300">0</div>
+          <div class="text-xs uppercase tracking-wider text-rose-100/70 mt-1">Hari</div>
+        </div>
+        <div class="glass-card rounded-2xl p-4">
+          <div id="hours-count" class="text-3xl sm:text-4xl font-bold text-rose-300">00</div>
+          <div class="text-xs uppercase tracking-wider text-rose-100/70 mt-1">Jam</div>
+        </div>
+        <div class="glass-card rounded-2xl p-4">
+          <div id="minutes-count" class="text-3xl sm:text-4xl font-bold text-rose-300">00</div>
+          <div class="text-xs uppercase tracking-wider text-rose-100/70 mt-1">Menit</div>
+        </div>
+        <div class="glass-card rounded-2xl p-4">
+          <div id="seconds-count" class="text-3xl sm:text-4xl font-bold text-rose-300">00</div>
+          <div class="text-xs uppercase tracking-wider text-rose-100/70 mt-1">Detik</div>
+        </div>
+      </div>
+
+      <!-- Pengaturan Tanggal Mulai (Opsional) -->
+      <div class="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-rose-200/75">
+        <label for="start-date-input">Tanggal jadian:</label>
+        <input id="start-date-input" type="date" value="2023-11-20" class="bg-white/10 border border-rose-300/25 rounded-lg px-2.5 py-1 text-rose-100 focus:outline-none focus:border-rose-400" />
+      </div>
+    </section>
+
+    <!-- Galeri Polaroid Interaktif -->
+    <section id="galeri" class="py-10">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-rose-100">Galeri Kenangan Manis</h2>
+          <p class="text-rose-200/75 text-sm mt-1">
+            Klik foto untuk melihat lebih besar, atau klik tombol <span class="text-rose-300 font-medium">Ganti Foto</span> untuk memasang foto asli dari perangkatmu.
+          </p>
+        </div>
+      </div>
+
+      <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- Surat Cinta & Alasan Sayang Acak -->
+    <section id="surat" class="py-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="glass-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 text-rose-300 text-sm font-semibold mb-3">
+            <i class="fa-solid fa-envelope-open-text"></i>
+            <span>Surat untuk Sukma</span>
+          </div>
+          <h2 class="font-script text-4xl text-rose-200 mb-4">Untuk Sukma Wahyuning Tyas,</h2>
+          <div class="space-y-3 text-rose-100/85 text-sm sm:text-base leading-relaxed">
+            <p>
+              Terima kasih sudah bertahan dan melangkah sejauh ini bersama Fahri selama tiga tahun. Setiap fase yang kita lewati—dari hari biasa yang sederhana sampai momen penting seperti kelulusan dan pencapaianmu—selalu terasa lebih berarti karena ada kamu.
+            </p>
+            <p>
+              Maaf kalau kadang masih ada kurangnya, dan terima kasih sudah selalu sabar memberi ruang untuk saling memahami. Semoga ke depannya kita bisa terus saling menjaga, saling menguatkan, dan menuliskan lebih banyak cerita indah bersama.
+            </p>
+          </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-rose-200/15 flex items-center justify-between">
+          <span class="font-script text-2xl text-rose-300">Dengan sayang, Muhammad Fahri</span>
+          <button id="celebrate-btn" type="button" class="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-sm font-semibold shadow-lg shadow-rose-500/30 transition">
+            <i class="fa-solid fa-heart mr-1"></i> Kirim Peluk
+          </button>
+        </div>
+      </div>
+
+      <!-- Generator Alasan Sayang -->
+      <div class="glass-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 text-amber-300 text-sm font-semibold mb-3">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Alasan Kenapa Fahri Sayang Sukma</span>
+          </div>
+          <h3 class="text-xl sm:text-2xl font-bold text-rose-100 mb-4">Satu Alasan untuk Hari Ini</h3>
+          <div class="min-h-[140px] rounded-2xl bg-black/25 border border-rose-200/15 p-5 flex items-center justify-center text-center">
+            <p id="reason-text" class="text-base sm:text-lg text-rose-100 italic leading-relaxed">
+              "Karena senyumanmu selalu bikin hari yang paling capek sekalipun terasa jauh lebih ringan."
+            </p>
+          </div>
+        </div>
+        <button id="next-reason-btn" type="button" class="mt-6 w-full py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-rose-300/30 text-rose-100 font-semibold text-sm transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-shuffle text-rose-300"></i>
+          <span>Tampilkan Alasan Lainnya</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Timeline 3 Tahun -->
+    <section id="timeline" class="py-10">
+      <h2 class="text-2xl sm:text-3xl font-bold text-rose-100 mb-6">Perjalanan 3 Tahun Kita</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card rounded-2xl p-6 border-t-4 border-t-rose-400">
+          <span class="text-xs font-bold uppercase tracking-wider text-rose-300">Tahun Pertama</span>
+          <h3 class="text-lg font-bold text-white mt-1 mb-2">Awal Cerita &amp; Saling Mengenal</h3>
+          <p class="text-sm text-rose-100/80 leading-relaxed">
+            Belajar memahami kebiasaan masing-masing, mulai dari obrolan panjang sampai momen-momen kecil yang bikin hubungan terasa makin dekat.
+          </p>
+        </div>
+        <div class="glass-card rounded-2xl p-6 border-t-4 border-t-pink-400">
+          <span class="text-xs font-bold uppercase tracking-wider text-pink-300">Tahun Kedua</span>
+          <h3 class="text-lg font-bold text-white mt-1 mb-2">Tumbuh &amp; Saling Menguatkan</h3>
+          <p class="text-sm text-rose-100/80 leading-relaxed">
+            Melewati berbagai kesibukan, dinamika, dan proses pendewasaan sambil tetap memilih untuk saling ada dan saling mendukung.
+          </p>
+        </div>
+        <div class="glass-card rounded-2xl p-6 border-t-4 border-t-amber-300">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-300">Tahun Ketiga</span>
+          <h3 class="text-lg font-bold text-white mt-1 mb-2">Makin Solid &amp; Penuh Harapan</h3>
+          <p class="text-sm text-rose-100/80 leading-relaxed">
+            Merayakan pencapaian bersama, memperbanyak tawa konyol, dan melangkah ke tahun-tahun berikutnya dengan tujuan yang makin jelas.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kupon Cinta Interaktif -->
+    <section id="kupon" class="py-10">
+      <div class="mb-6">
+        <h2 class="text-2xl sm:text-3xl font-bold text-rose-100">Kupon Cinta Spesial untuk Sukma</h2>
+        <p class="text-sm text-rose-200/75 mt-1">Klik "Klaim Kupon" kapan saja kamu mau menukarkannya ke Fahri.</p>
+      </div>
+      <div id="coupons-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+      <div id="coupon-status" class="mt-4 text-sm text-emerald-300 min-h-[24px]"></div>
+    </section>
+
+    <!-- Kuis Kecil Hubungan -->
+    <section id="kuis" class="py-10">
+      <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-2xl mx-auto">
+        <div class="flex items-center gap-2 text-rose-300 text-sm font-semibold mb-2">
+          <i class="fa-solid fa-circle-question"></i>
+          <span>Kuis Singkat 3 Tahun</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-bold text-rose-100 mb-4" id="quiz-question"></h2>
+        <div id="quiz-options" class="space-y-2.5"></div>
+        <div id="quiz-feedback" class="mt-4 text-sm font-medium text-rose-200 min-h-[24px]"></div>
+        <button id="next-quiz-btn" type="button" class="mt-4 px-4 py-2 rounded-xl bg-rose-500/25 hover:bg-rose-500/40 border border-rose-400/40 text-rose-100 text-sm font-semibold transition">
+          Pertanyaan Berikutnya
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Preview Foto -->
+  <div id="photo-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-[#1c0a13] border border-rose-300/25 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="p-4 flex items-center justify-between border-b border-rose-200/10">
+        <h3 id="modal-title" class="font-semibold text-rose-100"></h3>
+        <button id="close-modal-btn" type="button" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-rose-200">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-4 bg-black/30 flex items-center justify-center">
+        <img id="modal-img" src="" alt="" class="max-h-[65vh] w-auto rounded-2xl object-contain" />
+      </div>
+      <p id="modal-caption" class="p-4 text-center text-sm text-rose-200/85"></p>
+    </div>
+  </div>
+
+  <script>
+    // Helper membuat ilustrasi SVG romantis sebagai data URI agar selalu tampil tanpa dependensi file eksternal
+    function makeSvgPhoto(title, subtitle, accentColor, bgStart, bgEnd, iconSymbol) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${bgStart}" />
+              <stop offset="100%" stop-color="${bgEnd}" />
+            </linearGradient>
+          </defs>
+          <rect width="800" height="800" fill="url(#bg)" />
+          <circle cx="400" cy="340" r="165" fill="${accentColor}" opacity="0.22" />
+          <circle cx="400" cy="340" r="120" fill="${accentColor}" opacity="0.35" />
+          <text x="400" y="375" text-anchor="middle" font-size="110" font-family="Apple Color Emoji, Segoe UI Emoji, sans-serif">${iconSymbol}</text>
+          <text x="400" y="555" text-anchor="middle" fill="#ffffff" font-size="38" font-weight="700" font-family="Plus Jakarta Sans, sans-serif">${title}</text>
+          <text x="400" y="605" text-anchor="middle" fill="#ffe4ec" font-size="24" font-family="Plus Jakarta Sans, sans-serif">${subtitle}</text>
+          <text x="400" y="715" text-anchor="middle" fill="#fecdd3" font-size="18" font-family="Plus Jakarta Sans, sans-serif">Klik "Ganti Foto" untuk pasang foto aslimu</text>
+        </svg>
+      `.trim();
+      return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+    }
+
+    const photos = [
+      {
+        id: 0,
+        title: "Fahri & Sukma",
+        caption: "Tatap mata sayang di sore hari 🌤️💕",
+        src: makeSvgPhoto("Fahri & Sukma", "3 Tahun Bersama • Kenangan Manis", "#fb7185", "#4c1d3d", "#1e1b4b", "💑")
+      },
+      {
+        id: 1,
+        title: "Wisuda Sukma Wahyuning Tyas",
+        caption: "Bangga banget lihat pencapaianmu 🎓✨",
+        src: makeSvgPhoto("Wisuda Sukma", "Selamat Atas Pencapaian Hebatmu!", "#f43f5e", "#581c2c", "#290c16", "🎓")
+      },
+      {
+        id: 2,
+        title: "Kompak & Lucu Berdoa",
+        caption: "Selalu kompak walau pose kocak 😄🙏",
+        src: makeSvgPhoto("Kompak Berdoa", "Selalu Ada Cerita Seru Berdua", "#f59e0b", "#451a03", "#1f1209", "🙏")
+      },
+      {
+        id: 3,
+        title: "Selfie Seru Bareng Adek",
+        caption: "Momen rame penuh tawa bersama keluarga kecil 🥰",
+        src: makeSvgPhoto("Selfie Seru", "Penuh Tawa & Kehangatan", "#ec4899", "#3b0764", "#17092b", "📸")
+      },
+      {
+        id: 4,
+        title: "Ekspresi Gemes Malam Hari",
+        caption: "Tetap manis di setiap suasana malam 🌙💖",
+        src: makeSvgPhoto("Momen Malam", "Tetap Manis di Setiap Waktu", "#a855f7", "#1e1b4b", "#0f172a", "🌙")
+      },
+      {
+        id: 5,
+        title: "Babak Baru Kita",
+        caption: "Menuju tahun-tahun berikutnya bersama ❤️",
+        src: makeSvgPhoto("3rd Anniversary", "Fahri & Sukma • Selamanya", "#e11d48", "#881337", "#2b0713", "❤️")
+      }
+    ];
+
+    let activeUploadPhotoId = null;
+    const uploadInput = document.getElementById("photo-upload-input");
+
+    function renderGallery() {
+      const grid = document.getElementById("gallery-grid");
+      grid.innerHTML = "";
+
+      photos.forEach((photo) => {
+        const card = document.createElement("div");
+        card.className = "polaroid rounded-2xl p-3.5 flex flex-col justify-between";
+
+        const imgWrapper = document.createElement("div");
+        imgWrapper.className = "aspect-square w-full rounded-xl overflow-hidden bg-rose-950/20 cursor-pointer";
+        imgWrapper.addEventListener("click", () => openModal(photo));
+
+        const img = document.createElement("img");
+        img.src = photo.src;
+        img.alt = photo.title;
+        img.className = "w-full h-full object-cover";
+        img.onerror = () => {
+          img.src = makeSvgPhoto(photo.title, "3 Tahun Bersama", "#fb7185", "#4c1d3d", "#1e1b4b", "💕");
+        };
+
+        imgWrapper.appendChild(img);
+
+        const footer = document.createElement("div");
+        footer.className = "pt-3 flex items-center justify-between gap-2";
+
+        const textBox = document.createElement("div");
+        textBox.innerHTML = `
+          <div class="font-bold text-sm text-rose-950">${photo.title}</div>
+          <div class="font-script text-lg text-rose-800 leading-snug">${photo.caption}</div>
+        `;
+
+        const uploadBtn = document.createElement("button");
+        uploadBtn.type = "button";
+        uploadBtn.className = "shrink-0 px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition";
+        uploadBtn.innerHTML = `<i class="fa-solid fa-camera mr-1"></i> Ganti Foto`;
+        uploadBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          activeUploadPhotoId = photo.id;
+          uploadInput.value = "";
+          uploadInput.click();
+        });
+
+        footer.appendChild(textBox);
+        footer.appendChild(uploadBtn);
+
+        card.appendChild(imgWrapper);
+        card.appendChild(footer);
+        grid.appendChild(card);
+      });
+    }
+
+    uploadInput.addEventListener("change", (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file || activeUploadPhotoId === null) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const target = photos.find((p) => p.id === activeUploadPhotoId);
+        if (target && typeof reader.result === "string") {
+          target.src = reader.result;
+          renderGallery();
+          spawnBurstHearts(12);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Modal preview
+    const modal = document.getElementById("photo-modal");
+    const modalImg = document.getElementById("modal-img");
+    const modalTitle = document.getElementById("modal-title");
+    const modalCaption = document.getElementById("modal-caption");
+
+    function openModal(photo) {
+      modalTitle.textContent = photo.title;
+      modalImg.src = photo.src;
+      modalImg.alt = photo.title;
+      modalCaption.textContent = photo.caption;
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    document.getElementById("close-modal-btn").addEventListener("click", () => {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    });
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }
+    });
+
+    // Live Counter Waktu
+    const startDateInput = document.getElementById("start-date-input");
+
+    function updateCounter() {
+      const startVal = startDateInput.value || "2023-11-20";
+      const startTime = new Date(startVal + "T00:00:00").getTime();
+      const now = Date.now();
+      const diff = Math.max(0, now - startTime);
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById("days-count").textContent = days.toLocaleString("id-ID");
+      document.getElementById("hours-count").textContent = String(hours).padStart(2, "0");
+      document.getElementById("minutes-count").textContent = String(minutes).padStart(2, "0");
+      document.getElementById("seconds-count").textContent = String(seconds).padStart(2, "0");
+    }
+
+    startDateInput.addEventListener("change", updateCounter);
+    updateCounter();
+    setInterval(updateCounter, 1000);
+
+    // Alasan Sayang Acak
+    const reasons = [
+      "Karena senyumanmu selalu bikin hari yang paling capek sekalipun terasa jauh lebih ringan.",
+      "Karena kamu selalu mau dengerin cerita panjang Fahri tanpa bikin merasa sendirian.",
+      "Karena cara kamu berjuang dan meraih mimpi selalu bikin Fahri ikut bangga.",
+      "Karena momen sederhana bareng Sukma selalu terasa lebih berkesan.",
+      "Karena setelah 3 tahun berjalan, rasanya tetap nyaman dan pengen terus bareng."
+    ];
+    let reasonIndex = 0;
+
+    document.getElementById("next-reason-btn").addEventListener("click", () => {
+      reasonIndex = (reasonIndex + 1) % reasons.length;
+      document.getElementById("reason-text").textContent = `"${reasons[reasonIndex]}"`;
+      spawnBurstHearts(8);
+    });
+
+    document.getElementById("celebrate-btn").addEventListener("click", () => {
+      spawnBurstHearts(18);
+    });
+
+    // Kupon Cinta
+    const coupons = [
+      { title: "Kupon Makan & Jajan", desc: "Bebas pilih menu makanan atau camilan favorit Sukma." },
+      { title: "Kupon Es Krim / Manis", desc: "Berlaku kapan saja saat cuaca lagi panas atau lagi pengen yang manis." },
+      { title: "Kupon Deep Talk & Quality Time", desc: "Waktu khusus ngobrol santai atau nonton bareng tanpa gangguan." }
+    ];
+
+    const couponsGrid = document.getElementById("coupons-grid");
+    const couponStatus = document.getElementById("coupon-status");
+
+    coupons.forEach((c) => {
+      const box = document.createElement("div");
+      box.className = "glass-card rounded-2xl p-5 flex flex-col justify-between border border-dashed border-rose-300/35";
+      box.innerHTML = `
+        <div>
+          <div class="text-xs uppercase tracking-wider text-amber-300 font-semibold mb-1">Edisi 3 Tahun</div>
+          <h3 class="text-lg font-bold text-white">${c.title}</h3>
+          <p class="text-sm text-rose-100/75 mt-1">${c.desc}</p>
+        </div>
+      `;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "mt-4 w-full py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-sm font-semibold transition";
+      btn.textContent = "Klaim Kupon";
+      btn.addEventListener("click", () => {
+        couponStatus.textContent = `Sukma baru saja mengklaim "${c.title}"! Screenshot dan kirim ke Fahri ya.`;
+        spawnBurstHearts(10);
+      });
+      box.appendChild(btn);
+      couponsGrid.appendChild(box);
+    });
+
+    // Kuis Singkat
+    const quizData = [
+      {
+        q: "Sudah berapa lama perjalanan hubungan Fahri & Sukma yang dirayakan di halaman ini?",
+        options: ["1 Tahun", "2 Tahun", "3 Tahun", "5 Tahun"],
+        answer: 2,
+        note: "Benar banget! Sudah 3 tahun melangkah bersama."
+      },
+      {
+        q: "Siapa nama lengkap pacar Muhammad Fahri?",
+        options: ["Sukma Wahyuning Tyas", "Sukma Amelia Putri", "Sukma Ayu Lestari", "Sukma Rahmawati"],
+        answer: 0,
+        note: "Tepat sekali, Sukma Wahyuning Tyas!"
+      }
+    ];
+
+    let currentQuiz = 0;
+    const quizQuestionEl = document.getElementById("quiz-question");
+    const quizOptionsEl = document.getElementById("quiz-options");
+    const quizFeedbackEl = document.getElementById("quiz-feedback");
+
+    function renderQuiz() {
+      const item = quizData[currentQuiz];
+      quizQuestionEl.textContent = item.q;
+      quizFeedbackEl.textContent = "";
+      quizOptionsEl.innerHTML = "";
+
+      item.options.forEach((opt, idx) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "w-full text-left px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-rose-200/20 text-sm text-rose-100 transition";
+        b.textContent = opt;
+        b.addEventListener("click", () => {
+          if (idx === item.answer) {
+            quizFeedbackEl.className = "mt-4 text-sm font-semibold text-emerald-300";
+            quizFeedbackEl.textContent = item.note;
+            spawnBurstHearts(8);
+          } else {
+            quizFeedbackEl.className = "mt-4 text-sm font-semibold text-amber-300";
+            quizFeedbackEl.textContent = "Hampir tepat! Coba pilih opsi yang lain ya.";
+          }
+        });
+        quizOptionsEl.appendChild(b);
+      });
+    }
+
+    document.getElementById("next-quiz-btn").addEventListener("click", () => {
+      currentQuiz = (currentQuiz + 1) % quizData.length;
+      renderQuiz();
+    });
+
+    renderQuiz();
+
+    // Efek Hati Melayang
+    const heartsContainer = document.getElementById("hearts-container");
+
+    function createFloatingHeart(customSize = null, customDuration = null) {
+      const heart = document.createElement("div");
+      heart.className = "floating-heart text-rose-400/80";
+      const size = customSize || (14 + Math.random() * 18);
+      const duration = customDuration || (6 + Math.random() * 6);
+      heart.style.left = (Math.random() * 96) + "vw";
+      heart.style.fontSize = size + "px";
+      heart.style.animationDuration = duration + "s";
+      heart.innerHTML = '<i class="fa-solid fa-heart"></i>';
+      heartsContainer.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, duration * 1000 + 200);
+    }
+
+    function spawnBurstHearts(count) {
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          createFloatingHeart(18 + Math.random() * 14, 3.5 + Math.random() * 2.5);
+        }, i * 80);
+      }
+    }
+
+    setInterval(() => {
+      createFloatingHeart();
+    }, 1100);
+
+    // Nada Lembut Web Audio API (tanpa file audio eksternal)
+    let audioCtx = null;
+    let musicInterval = null;
+    let isPlaying = false;
+    const notes = [523.25, 659.25, 783.99, 659.25, 587.33, 698.46, 880.0, 783.99];
+    let noteIdx = 0;
+
+    function playSoftNote(freq) {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+      gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.04, audioCtx.currentTime + 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.1);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 1.15);
+    }
+
+    document.getElementById("music-toggle").addEventListener("click", () => {
+      const icon = document.getElementById("music-icon");
+      const label = document.getElementById("music-label");
+
+      if (!isPlaying) {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          audioCtx = new AudioContextClass();
+        }
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+        isPlaying = true;
+        icon.className = "fa-solid fa-volume-high text-rose-300";
+        label.textContent = "Hentikan Nada";
+        playSoftNote(notes[noteIdx % notes.length]);
+        noteIdx++;
+        musicInterval = setInterval(() => {
+          playSoftNote(notes[noteIdx % notes.length]);
+          noteIdx++;
+        }, 1200);
+      } else {
+        isPlaying = false;
+        clearInterval(musicInterval);
+        icon.className = "fa-solid fa-volume-xmark text-rose-400";
+        label.textContent = "Putar Nada Lembut";
+      }
+    });
+
+    // Render awal galeri
+    renderGallery();
+  </script>
+</body>
+</html>
